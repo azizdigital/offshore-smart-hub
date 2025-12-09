@@ -1,0 +1,82 @@
+{
+  "name": "Offshore Smart Hub - Complete Operations Suite",
+  "short_name": "Offshore Hub",
+  "description": "Complete offshore operations management with calculators, safety reports, and MOB/DEMOB access",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#e3f2fd",
+  "theme_color": "#3b82f6",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./icons/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities", "business"],
+  "screenshots": [
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "label": "Offshore Smart Hub Main Screen"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "One-Tap Mobilization",
+      "short_name": "MOB/DEMOB",
+      "description": "Quick access to mobilization systems",
+      "url": "./index.html#mobilization",
+      "icons": [
+        {
+          "src": "./icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Calculators",
+      "short_name": "Calc",
+      "description": "Engineering calculators",
+      "url": "./index.html#calculator",
+      "icons": [
+        {
+          "src": "./icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Safety Report",
+      "short_name": "Report",
+      "description": "Create safety report",
+      "url": "./index.html#report",
+      "icons": [
+        {
+          "src": "./icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}
