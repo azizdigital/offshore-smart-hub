@@ -1,567 +1,535 @@
-// ========================================
-// Offshore Smart Hub - Main Application
-// ========================================
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(viewId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Toggle Functions
+        function toggleCustomDrum() {
+            const drumType = document.getElementById('drumSize').value;
+            const customGroup = document.getElementById('customDrumGroup');
+            customGroup.classList.toggle('hidden', drumType !== 'custom');
+        }
+        
+        function toggleCustomPPE() {
+            const ppeLevel = document.getElementById('ppeLevel').value;
+            const customGroup = document.getElementById('customPPEGroup');
+            customGroup.classList.toggle('hidden', ppeLevel !== 'custom');
+        }
+        
+        function toggleCustomCrane() {
+            const craneType = document.getElementById('craneType').value;
+            const customGroup = document.getElementById('customCraneGroup');
+            customGroup.classList.toggle('hidden', craneType !== 'custom');
+        }
+        
+        function toggleCustomTurbine() {
+            const turbineType = document.getElementById('turbineType').value;
+            const customGroup = document.getElementById('customTurbineGroup');
+            customGroup.classList.toggle('hidden', turbineType !== 'custom');
+        }
+        
+        function toggleCustomWeather() {
+            const operationType = document.getElementById('operationType').value;
+            const customGroup = document.getElementById('customWeatherGroup');
+            customGroup.classList.toggle('hidden', operationType !== 'custom');
+        }
+        
+        // Calculator Functions - EXACT COPY from calculator_failplay.html
+        
+        function convertVolume() {
+            const val = parseFloat(document.getElementById('volumeInput').value);
+            const type = document.getElementById('volumeType').value;
+            const shrinkage = parseFloat(document.getElementById('shrinkageFactor').value) || 0.881;
+            if (isNaN(val)) {
+                alert('Invalid value');
+                return;
+            }
+            
+            let resultWithout, resultWith;
+            if (type === 'kld_kbd') {
+                resultWithout = (val * 6.293 / 1000);
+                resultWith = resultWithout * shrinkage;
+                document.getElementById('volumeResult').innerHTML = '<strong>Results:</strong><br>Without Shrinkage: ' + resultWithout.toFixed(4) + ' KBD<br>With Shrinkage: ' + resultWith.toFixed(4) + ' KBD';
+            } else {
+                resultWithout = (val / (6.293 / 1000));
+                resultWith = resultWithout / shrinkage;
+                document.getElementById('volumeResult').innerHTML = '<strong>Results:</strong><br>Without Shrinkage: ' + resultWithout.toFixed(4) + ' KLD<br>With Shrinkage: ' + resultWith.toFixed(4) + ' KLD';
+            }
+            document.getElementById('volumeResult').classList.add('show');
+        }
 
-let currentReport = '';
+        function convertUniversal() {
+            const val = parseFloat(document.getElementById('universalValue').value);
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            if (isNaN(val)) {
+                alert('Invalid value');
+                return;
+            }
+            if (fromUnit === toUnit) {
+                alert('Same units selected');
+                return;
+            }
+            
+            const conversions = {
+                kpa: {psi: 0.145038, bar: 0.01},
+                psi: {kpa: 6.89476, bar: 0.0689476},
+                bar: {kpa: 100, psi: 14.5038},
+                celsius: {fahrenheit: val => val * 9/5 + 32},
+                fahrenheit: {celsius: val => (val - 32) * 5/9},
+                inches: {cm: 2.54, feet: 0.0833333, meters: 0.0254},
+                cm: {inches: 0.393701, feet: 0.0328084, meters: 0.01},
+                feet: {inches: 12, cm: 30.48, meters: 0.3048},
+                meters: {inches: 39.3701, cm: 100, feet: 3.28084}
+            };
+            
+            const conv = conversions[fromUnit];
+            if (!conv || !conv[toUnit]) {
+                alert('Conversion not available');
+                return;
+            }
+            
+            const result = typeof conv[toUnit] === 'function' ? conv[toUnit](val) : val * conv[toUnit];
+            const resultText = '<strong>Result:</strong><br>' + val + ' ' + fromUnit + ' = ' + result.toFixed(4) + ' ' + toUnit;
+            document.getElementById('universalResult').innerHTML = resultText;
+            document.getElementById('universalResult').classList.add('show');
+        }
 
-// Initialize app
-document.addEventListener('DOMContentLoaded', function() {
-    // Set active home button
-    document.getElementById('nav-home').classList.add('active');
-    
-    // Set current datetime for incident report
-    const now = new Date();
-    const offset = now.getTimezoneOffset() * 60000;
-    const localISOTime = (new Date(now - offset)).toISOString().slice(0, 16);
-    if (document.getElementById('incidentDateTime')) {
-        document.getElementById('incidentDateTime').value = localISOTime;
-    }
-    
-    // Setup custom input event listeners
-    setupCustomInputs();
-});
+        function convertGas() {
+            const val = parseFloat(document.getElementById('gasInput').value);
+            const type = document.getElementById('gasType').value;
+            if (isNaN(val)) {
+                alert('Invalid value');
+                return;
+            }
+            
+            const result = type === 'km3_mmscf' ? val * 0.035373 : val / 0.035373;
+            const unit = type === 'km3_mmscf' ? 'mmscf/d' : 'km³/d';
+            const resultText = '<strong>Gas Conversion:</strong><br>' + val + ' = ' + result.toFixed(4) + ' ' + unit;
+            document.getElementById('gasResult').innerHTML = resultText;
+            document.getElementById('gasResult').classList.add('show');
+        }
 
-// ========================================
-// Navigation Functions
-// ========================================
+        function calculateDropLeak() {
+            const dropRate = parseFloat(document.getElementById('dropRate').value);
+            const duration = parseFloat(document.getElementById('dropDuration').value);
+            const dropSize = parseFloat(document.getElementById('dropSize').value);
+            
+            if (isNaN(dropRate) || isNaN(duration)) {
+                alert('Invalid values');
+                return;
+            }
+            
+            const totalDrops = dropRate * duration;
+            const totalVolumeL = totalDrops * dropSize / 1000;
+            const ratePerHour = dropRate * 60 * dropSize / 1000;
+            
+            const resultText = '<strong>Drop Leak Analysis:</strong><br>Rate: ' + ratePerHour.toFixed(3) + ' L/hr<br>Total Volume: ' + totalVolumeL.toFixed(3) + ' L<br>Total Drops: ' + totalDrops.toFixed(0);
+            document.getElementById('dropLeakResult').innerHTML = resultText;
+            document.getElementById('dropLeakResult').classList.add('show');
+        }
 
-function showView(view) {
-    // Hide all views
-    document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-    
-    // Show selected view
-    document.getElementById('view-' + view).classList.remove('hidden');
-    
-    // Update nav buttons
-    document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
-    document.getElementById('nav-' + view).classList.add('active');
-    
-    // Scroll to top
-    window.scrollTo(0, 0);
-}
+        function calculateGasLeak() {
+            const diameter = parseFloat(document.getElementById('gasHoleDiameter').value);
+            const pressure = parseFloat(document.getElementById('gasPressure').value);
+            const duration = parseFloat(document.getElementById('gasDuration').value);
+            const temperature = parseFloat(document.getElementById('gasTemperature').value) || 35;
+            
+            if (isNaN(diameter) || isNaN(pressure) || isNaN(duration)) {
+                alert('Invalid values');
+                return;
+            }
+            
+            const area = Math.PI * Math.pow(diameter / 2000, 2);
+            const MW = 20; const R = 8.314; const Z = 0.9; const T = temperature + 273.15;
+            const leakRate = 0.3 * area * pressure * 100000 * Math.sqrt(MW / (Z * R * T));
+            const totalKg = leakRate * duration * 60;
+            
+            const resultText = '<strong>Gas Leak Analysis:</strong><br>Leak Rate: ' + leakRate.toFixed(4) + ' kg/s<br>Total Amount: ' + totalKg.toFixed(2) + ' kg<br>Duration: ' + duration + ' minutes';
+            document.getElementById('gasLeakResult').innerHTML = resultText;
+            document.getElementById('gasLeakResult').classList.add('show');
+        }
 
-function openLink(url) {
-    window.open(url, '_blank');
-}
+        function calculateOilLeak() {
+            const diameter = parseFloat(document.getElementById('oilHoleDiameter').value);
+            const pressure = parseFloat(document.getElementById('oilPressure').value);
+            const duration = parseFloat(document.getElementById('oilDuration').value);
+            const density = parseFloat(document.getElementById('oilDensity').value) || 700;
+            
+            if (isNaN(diameter) || isNaN(pressure) || isNaN(duration)) {
+                alert('Invalid values');
+                return;
+            }
+            
+            const radius = diameter / 2;
+            const areaCm2 = Math.PI * Math.pow(radius / 10, 2);
+            const deltaP = pressure - 1.01325;
+            const leakRate = 0.044721 * 0.62 * areaCm2 * Math.sqrt(density * deltaP);
+            const totalKg = leakRate * duration * 60;
+            
+            // CRITICAL FIX: Convert kg to liters and check BOTH thresholds
+            const totalLiters = totalKg / density * 1000;
+            
+            const resultText = '<strong>Oil Leak Analysis:</strong><br>Leak Rate: ' + leakRate.toFixed(4) + ' kg/s<br>Total Amount: ' + totalKg.toFixed(2) + ' kg (' + totalLiters.toFixed(2) + ' L)<br>Duration: ' + duration + ' minutes';
+            document.getElementById('oilLeakResult').innerHTML = resultText;
+            document.getElementById('oilLeakResult').classList.add('show');
+            
+            let classification = 'Below Threshold', color = '#10b981';
+            if (totalKg >= 2000) {
+                classification = 'Tier 1 - Major'; 
+                color = '#dc2626';
+            } else if (totalKg >= 200) {
+                classification = 'Tier 2 - Reportable'; 
+                color = '#f59e0b';
+            } else if (totalKg >= 100) {
+                classification = 'Minor Reportable'; 
+                color = '#3b82f6';
+            } else if (totalLiters >= 10) {
+                // CRITICAL: Check for ≥10L threshold even if kg is below 100
+                classification = 'Reportable (≥10L)'; 
+                color = '#3b82f6';
+            }
+            
+            document.getElementById('thresholdResult').innerHTML = '<strong style="color:' + color + '">Classification:</strong> ' + classification;
+            document.getElementById('thresholdResult').classList.add('show');
+        }
 
-// ========================================
-// Calculator Functions
-// ========================================
+        function calculateProductionLoss() {
+            const hours = parseFloat(document.getElementById('shutdownHours').value) || 0;
+            const minutes = parseFloat(document.getElementById('shutdownMinutes').value) || 0;
+            const production = parseFloat(document.getElementById('normalProduction').value);
+            
+            if (isNaN(production)) {
+                alert('Invalid production rate');
+                return;
+            }
+            
+            const totalHours = hours + minutes / 60;
+            const lostBarrels = production * totalHours / 24;
+            
+            const resultText = '<strong>Production Loss:</strong><br>Duration: ' + hours + 'h ' + minutes + 'm<br>Volume Lost: ' + lostBarrels.toFixed(2) + ' barrels';
+            document.getElementById('productionLossResult').innerHTML = resultText;
+            document.getElementById('productionLossResult').classList.add('show');
+        }
 
-function convertVolume() {
-    const value = parseFloat(document.getElementById('volumeInput').value);
-    const type = document.getElementById('volumeType').value;
-    const factor = parseFloat(document.getElementById('shrinkageFactor').value);
-    
-    if (!value || !factor) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    let result;
-    if (type === 'kld_kbd') {
-        result = value / factor;
-        document.getElementById('volumeResult').innerHTML = `<strong>Result:</strong> ${result.toFixed(3)} KBD`;
-    } else {
-        result = value * factor;
-        document.getElementById('volumeResult').innerHTML = `<strong>Result:</strong> ${result.toFixed(3)} KLD`;
-    }
-    document.getElementById('volumeResult').style.display = 'block';
-}
+        function calculateChemical() {
+            const rate = parseFloat(document.getElementById('injectionRate').value);
+            const ppm = parseFloat(document.getElementById('chemPPM').value);
+            const drumType = document.getElementById('drumSize').value;
+            
+            if (isNaN(rate) || isNaN(ppm)) {
+                alert('Invalid values');
+                return;
+            }
+            
+            const drumSize = drumType === 'custom' ? parseFloat(document.getElementById('customDrumSize').value) : parseFloat(drumType);
+            if (isNaN(drumSize)) {
+                alert('Invalid drum size');
+                return;
+            }
+            
+            const dailyVolume = rate * 24;
+            const weeklyVolume = dailyVolume * 7;
+            const drumsNeeded = Math.ceil(weeklyVolume / drumSize);
+            
+            const resultText = '<strong>Chemical Injection:</strong><br>Daily: ' + dailyVolume.toFixed(1) + ' L/day<br>Weekly: ' + weeklyVolume.toFixed(1) + ' L/week<br>Drums Needed: ' + drumsNeeded + ' x ' + drumSize + 'L';
+            document.getElementById('chemicalResult').innerHTML = resultText;
+            document.getElementById('chemicalResult').classList.add('show');
+        }
 
-function convertUniversal() {
-    const value = parseFloat(document.getElementById('universalValue').value);
-    const from = document.getElementById('fromUnit').value;
-    const to = document.getElementById('toUnit').value;
-    
-    if (!value) {
-        alert('Please enter a value');
-        return;
-    }
+        function calculateDropObject() {
+            const weight = parseFloat(document.getElementById('objectWeight').value);
+            const height = parseFloat(document.getElementById('dropHeight').value);
+            const ppeSelection = document.getElementById('ppeLevel').value;
+            
+            if (isNaN(weight) || isNaN(height)) {
+                alert('Invalid values');
+                return;
+            }
+            
+            let ppe;
+            if (ppeSelection === 'custom') {
+                ppe = parseFloat(document.getElementById('customPPEFactor').value);
+                if (isNaN(ppe)) {
+                    alert('Enter custom PPE factor');
+                    return;
+                }
+            } else {
+                ppe = parseFloat(ppeSelection);
+            }
+            
+            const energy = weight * 9.81 * height;
+            const adjustedEnergy = energy * ppe;
+            
+            let riskLevel, color;
+            if (adjustedEnergy < 50) {
+                riskLevel = 'Low Risk'; 
+                color = '#10b981';
+            } else if (adjustedEnergy < 200) {
+                riskLevel = 'Medium Risk'; 
+                color = '#f59e0b';
+            } else if (adjustedEnergy < 500) {
+                riskLevel = 'High Risk'; 
+                color = '#ef4444';
+            } else {
+                riskLevel = 'Fatal Risk'; 
+                color = '#dc2626';
+            }
+            
+            const resultText = '<strong>Drop Object:</strong><br>Impact Energy: ' + energy.toFixed(0) + ' J<br>With PPE: ' + adjustedEnergy.toFixed(0) + ' J<br><span style="color:' + color + '">Risk: ' + riskLevel + '</span>';
+            document.getElementById('dropObjectResult').innerHTML = resultText;
+            document.getElementById('dropObjectResult').classList.add('show');
+        }
 
-    const conversions = {
-        'kpa-psi': 0.145038,
-        'kpa-bar': 0.01,
-        'psi-kpa': 6.89476,
-        'psi-bar': 0.0689476,
-        'bar-kpa': 100,
-        'bar-psi': 14.5038,
-        'celsius-fahrenheit': (c) => (c * 9/5) + 32,
-        'fahrenheit-celsius': (f) => (f - 32) * 5/9,
-        'inches-cm': 2.54,
-        'cm-inches': 0.393701,
-        'feet-meters': 0.3048,
-        'meters-feet': 3.28084
-    };
+        function calculateCrane() {
+            const load = parseFloat(document.getElementById('loadWeight').value);
+            const boom = parseFloat(document.getElementById('boomLength').value);
+            const craneType = document.getElementById('craneType').value;
+            
+            if (isNaN(load) || isNaN(boom)) {
+                alert('Invalid values');
+                return;
+            }
+            
+            let capacity;
+            if (craneType === 'custom') {
+                capacity = parseFloat(document.getElementById('customCraneCapacity').value);
+                if (isNaN(capacity)) {
+                    alert('Invalid crane capacity');
+                    return;
+                }
+            } else {
+                capacity = parseFloat(craneType);
+            }
+            
+            const capacityAtBoom = capacity * (20 / boom);
+            const safeLoad = capacityAtBoom * 0.8;
+            const status = load <= safeLoad ? '✅ SAFE' : '❌ UNSAFE';
+            
+            const resultText = '<strong>Crane Analysis:</strong><br>Capacity at ' + boom + 'm: ' + capacityAtBoom.toFixed(1) + 'T<br>Safe Load: ' + safeLoad.toFixed(1) + 'T<br>Status: ' + status;
+            document.getElementById('craneResult').innerHTML = resultText;
+            document.getElementById('craneResult').classList.add('show');
+        }
 
-    let result;
-    const key = `${from}-${to}`;
-    
-    if (from === to) {
-        result = value;
-    } else if (typeof conversions[key] === 'function') {
-        result = conversions[key](value);
-    } else if (conversions[key]) {
-        result = value * conversions[key];
-    } else {
-        alert('Conversion not supported');
-        return;
-    }
+        function calculateFuel() {
+            const type = document.getElementById('turbineType').value;
+            const load = parseFloat(document.getElementById('turbineLoad').value);
+            const hours = parseFloat(document.getElementById('operatingHours').value);
+            
+            if (isNaN(load) || isNaN(hours)) {
+                alert('Invalid values');
+                return;
+            }
+            
+            let baseRate;
+            if (type === 'custom') {
+                baseRate = parseFloat(document.getElementById('customTurbineRate').value);
+                if (isNaN(baseRate)) {
+                    alert('Enter fuel rate');
+                    return;
+                }
+            } else {
+                const baseConsumption = {
+                    saturn20: 320, centaur40: 1100, centaur50: 1380, taurus60: 1320,
+                    taurus70: 2100, mars90: 2700, mars100: 3300, titan130: 3700,
+                    rb211: 2500, kongsberg: 2200
+                };
+                baseRate = baseConsumption[type];
+            }
+            
+            const consumption = baseRate * load / 100 * hours / 24;
+            
+            const resultText = '<strong>Fuel Consumption:</strong><br>Base Rate: ' + baseRate + ' L/hr<br>Load: ' + load + '% for ' + hours + 'hrs<br>Required: ' + consumption.toFixed(1) + ' L/day';
+            document.getElementById('fuelResult').innerHTML = resultText;
+            document.getElementById('fuelResult').classList.add('show');
+        }
 
-    document.getElementById('universalResult').innerHTML = `<strong>Result:</strong> ${result.toFixed(4)} ${to.toUpperCase()}`;
-    document.getElementById('universalResult').style.display = 'block';
-}
+        function calculateWeather() {
+            const wind = parseFloat(document.getElementById('windSpeed').value);
+            const wave = parseFloat(document.getElementById('waveHeight').value);
+            const operation = document.getElementById('operationType').value;
+            
+            if (isNaN(wind) || isNaN(wave)) {
+                alert('Invalid values');
+                return;
+            }
+            
+            let limit;
+            if (operation === 'custom') {
+                const customWind = parseFloat(document.getElementById('customWindLimit').value);
+                const customWave = parseFloat(document.getElementById('customWaveLimit').value);
+                if (isNaN(customWind) || isNaN(customWave)) {
+                    alert('Enter limits');
+                    return;
+                }
+                limit = {wind: customWind, wave: customWave};
+            } else {
+                const limits = {
+                    heli: {wind: 35, wave: 3}, 
+                    boat: {wind: 25, wave: 2.5}, 
+                    crane: {wind: 20, wave: 2}, 
+                    diving: {wind: 15, wave: 1.5}
+                };
+                limit = limits[operation];
+            }
+            
+            const windStatus = wind <= limit.wind ? '✅ OK' : '❌ EXCEED';
+            const waveStatus = wave <= limit.wave ? '✅ OK' : '❌ EXCEED';
+            
+            const resultText = '<strong>Weather Impact:</strong><br>Wind: ' + wind + ' kts (' + limit.wind + ') ' + windStatus + '<br>Wave: ' + wave + ' m (' + limit.wave + ') ' + waveStatus;
+            document.getElementById('weatherResult').innerHTML = resultText;
+            document.getElementById('weatherResult').classList.add('show');
+        }
+        
+        // Report Generator
+        function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            const platform = document.getElementById('reportPlatform').value;
+            const module = document.getElementById('reportModule').value;
+            const title = document.getElementById('reportTitle').value;
+            const date = document.getElementById('reportDate').value;
+            const time = document.getElementById('reportTime').value;
+            const description = document.getElementById('reportDescription').value;
+            const action = document.getElementById('reportAction').value;
+            const forward = document.getElementById('reportForward').value;
+            
+            if (!title || !date || !time || !description || !action || !forward) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Format date to DD/MM/YYYY
+            const dateObj = new Date(date);
+            const formattedDate = String(dateObj.getDate()).padStart(2, '0') + '/' + 
+                                  String(dateObj.getMonth() + 1).padStart(2, '0') + '/' + 
+                                  dateObj.getFullYear();
+            
+            // Extract platform short code
+            const platformCode = platform.match(/\(([^)]+)\)/)[1];
+            
+            // Generate WhatsApp format report
+            const report = `*${reportType} Report*
 
-function convertGas() {
-    const value = parseFloat(document.getElementById('gasInput').value);
-    const type = document.getElementById('gasType').value;
-    
-    if (!value) {
-        alert('Please enter a value');
-        return;
-    }
-    
-    let result;
-    if (type === 'km3_mmscf') {
-        result = value * 35.3147;
-        document.getElementById('gasResult').innerHTML = `<strong>Result:</strong> ${result.toFixed(3)} mmscf/d`;
-    } else {
-        result = value / 35.3147;
-        document.getElementById('gasResult').innerHTML = `<strong>Result:</strong> ${result.toFixed(3)} km³/d`;
-    }
-    document.getElementById('gasResult').style.display = 'block';
-}
+Dear PMA IC,
 
-function calculateDropLeak() {
-    const rate = parseFloat(document.getElementById('dropRate').value);
-    const duration = parseFloat(document.getElementById('dropDuration').value);
-    const size = parseFloat(document.getElementById('dropSize').value);
-    
-    if (!rate || !duration || !size) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const totalDrops = rate * duration;
-    const totalML = totalDrops * size;
-    const totalLiters = totalML / 1000;
-    
-    document.getElementById('dropLeakResult').innerHTML = `
-        <strong>Leak Analysis:</strong><br>
-        Total Drops: ${totalDrops.toFixed(0)}<br>
-        Volume: ${totalML.toFixed(2)} ml (${totalLiters.toFixed(3)} L)<br>
-        ${totalLiters > 1 ? '<span style="color:#dc2626">⚠️ Significant leak detected</span>' : '<span style="color:#059669">✓ Minor leak</span>'}
-    `;
-    document.getElementById('dropLeakResult').style.display = 'block';
-}
+*Title:* ${title}
+*Date:* ${formattedDate} at ${time}
+*Platform:* ${platform}
+*Module/Area:* ${module}
 
-function calculateGasLeak() {
-    const diameter = parseFloat(document.getElementById('gasHoleDiameter').value) / 1000; // mm to m
-    const pressure = parseFloat(document.getElementById('gasPressure').value) * 100000; // bar to Pa
-    const duration = parseFloat(document.getElementById('gasDuration').value);
-    const temp = parseFloat(document.getElementById('gasTemperature').value) + 273.15; // C to K
-    
-    if (!diameter || !pressure || !duration || !temp) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const area = Math.PI * Math.pow(diameter / 2, 2);
-    const gasConstant = 8.314;
-    const molecularWeight = 16.04;
-    const velocity = Math.sqrt((2 * pressure) / (molecularWeight / gasConstant / temp));
-    const flowRate = area * velocity * 3600; // m³/hr
-    const totalVolume = flowRate * (duration / 60);
-    
-    document.getElementById('gasLeakResult').innerHTML = `
-        <strong>Gas Leak Analysis:</strong><br>
-        Flow Rate: ${flowRate.toFixed(3)} m³/hr<br>
-        Total Volume: ${totalVolume.toFixed(3)} m³<br>
-        Duration: ${duration} minutes<br>
-        ${totalVolume > 1 ? '<span style="color:#dc2626">⚠️ Significant gas release</span>' : '<span style="color:#059669">✓ Minor release</span>'}
-    `;
-    document.getElementById('gasLeakResult').style.display = 'block';
-}
-
-function calculateOilLeak() {
-    const diameter = parseFloat(document.getElementById('oilHoleDiameter').value) / 1000; // mm to m
-    const pressure = parseFloat(document.getElementById('oilPressure').value) * 100000; // bar to Pa
-    const duration = parseFloat(document.getElementById('oilDuration').value);
-    const density = parseFloat(document.getElementById('oilDensity').value);
-    
-    if (!diameter || !pressure || !duration || !density) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const area = Math.PI * Math.pow(diameter / 2, 2);
-    const velocity = Math.sqrt((2 * pressure) / density);
-    const flowRate = area * velocity * 3600; // m³/hr
-    const totalVolume = flowRate * (duration / 60);
-    const totalLiters = totalVolume * 1000;
-    
-    document.getElementById('oilLeakResult').innerHTML = `
-        <strong>Crude Oil Leak Analysis:</strong><br>
-        Flow Rate: ${flowRate.toFixed(6)} m³/hr (${(flowRate * 1000).toFixed(3)} L/hr)<br>
-        Total Volume: ${totalVolume.toFixed(6)} m³ (${totalLiters.toFixed(3)} L)<br>
-        Duration: ${duration} minutes<br>
-        ${totalLiters > 10 ? '<span style="color:#dc2626">⚠️ Report required - Above 10L threshold</span>' : '<span style="color:#059669">✓ Below reporting threshold</span>'}
-    `;
-    document.getElementById('oilLeakResult').style.display = 'block';
-}
-
-function calculateProductionLoss() {
-    const hours = parseInt(document.getElementById('shutdownHours').value) || 0;
-    const minutes = parseInt(document.getElementById('shutdownMinutes').value) || 0;
-    const production = parseFloat(document.getElementById('normalProduction').value);
-    
-    if (!production) {
-        alert('Please enter normal production rate');
-        return;
-    }
-    
-    const totalHours = hours + (minutes / 60);
-    const lossKBD = (production / 24) * totalHours;
-    const lossKLD = lossKBD * 0.881;
-    
-    document.getElementById('productionLossResult').innerHTML = `
-        <strong>Production Loss:</strong><br>
-        Shutdown Duration: ${hours}h ${minutes}m (${totalHours.toFixed(2)} hours)<br>
-        Volume Loss: ${lossKBD.toFixed(2)} KBD / ${lossKLD.toFixed(2)} KLD<br>
-        ${lossKBD > 100 ? '<span style="color:#dc2626">⚠️ Significant production impact</span>' : '<span style="color:#059669">✓ Minor impact</span>'}
-    `;
-    document.getElementById('productionLossResult').style.display = 'block';
-}
-
-function calculateChemical() {
-    const rate = parseFloat(document.getElementById('injectionRate').value);
-    const ppm = parseFloat(document.getElementById('chemPPM').value);
-    const drumSel = document.getElementById('drumSize').value;
-    const drumSize = drumSel === 'custom' ? parseFloat(document.getElementById('customDrumSize').value) : parseFloat(drumSel);
-    
-    if (!rate || !ppm || !drumSize) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const hoursPerDrum = drumSize / rate;
-    const daysPerDrum = hoursPerDrum / 24;
-    const drumsPerMonth = 30 / daysPerDrum;
-    
-    document.getElementById('chemicalResult').innerHTML = `
-        <strong>Chemical Injection:</strong><br>
-        Injection Rate: ${rate} L/hr<br>
-        Drum Duration: ${hoursPerDrum.toFixed(1)} hours (${daysPerDrum.toFixed(1)} days)<br>
-        Monthly Usage: ${drumsPerMonth.toFixed(1)} drums<br>
-        Concentration: ${ppm} PPM
-    `;
-    document.getElementById('chemicalResult').style.display = 'block';
-}
-
-function calculateDropObject() {
-    const weight = parseFloat(document.getElementById('objectWeight').value);
-    const height = parseFloat(document.getElementById('dropHeight').value);
-    const ppeSel = document.getElementById('ppeLevel').value;
-    const ppeFactor = ppeSel === 'custom' ? parseFloat(document.getElementById('customPPEFactor').value) : parseFloat(ppeSel);
-    
-    if (!weight || !height || !ppeFactor) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const gravity = 9.81;
-    const energy = weight * gravity * height;
-    const adjustedEnergy = energy * ppeFactor;
-    
-    let severity = '';
-    if (adjustedEnergy < 100) severity = 'Low Risk';
-    else if (adjustedEnergy < 500) severity = 'Medium Risk';
-    else if (adjustedEnergy < 1000) severity = 'High Risk';
-    else severity = 'Critical Risk';
-    
-    document.getElementById('dropObjectResult').innerHTML = `
-        <strong>Drop Impact Analysis:</strong><br>
-        Potential Energy: ${energy.toFixed(2)} Joules<br>
-        With PPE Protection: ${adjustedEnergy.toFixed(2)} Joules<br>
-        Risk Level: <span style="color:${adjustedEnergy > 500 ? '#dc2626' : '#059669'}">${severity}</span><br>
-        ${adjustedEnergy > 1000 ? '<span style="color:#dc2626">⚠️ Fatal injury potential</span>' : ''}
-    `;
-    document.getElementById('dropObjectResult').style.display = 'block';
-}
-
-function calculateCrane() {
-    const load = parseFloat(document.getElementById('loadWeight').value);
-    const boom = parseFloat(document.getElementById('boomLength').value);
-    const craneSel = document.getElementById('craneType').value;
-    const craneCapacity = craneSel === 'custom' ? parseFloat(document.getElementById('customCraneCapacity').value) : parseFloat(craneSel);
-    
-    if (!load || !boom || !craneCapacity) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const utilizationPercent = (load / craneCapacity) * 100;
-    const safetyFactor = craneCapacity / load;
-    
-    let status = '';
-    let color = '';
-    if (utilizationPercent > 90) {
-        status = 'Exceeds Safe Limit';
-        color = '#dc2626';
-    } else if (utilizationPercent > 75) {
-        status = 'High Utilization - Caution';
-        color = '#f59e0b';
-    } else {
-        status = 'Within Safe Limits';
-        color = '#059669';
-    }
-    
-    document.getElementById('craneResult').innerHTML = `
-        <strong>Crane Lifting Analysis:</strong><br>
-        Crane Capacity: ${craneCapacity}T<br>
-        Load: ${load}T<br>
-        Utilization: ${utilizationPercent.toFixed(1)}%<br>
-        Safety Factor: ${safetyFactor.toFixed(2)}<br>
-        Status: <span style="color:${color}">${status}</span>
-    `;
-    document.getElementById('craneResult').style.display = 'block';
-}
-
-function calculateFuel() {
-    const turbineSel = document.getElementById('turbineType').value;
-    const loadPercent = parseFloat(document.getElementById('turbineLoad').value);
-    const hours = parseFloat(document.getElementById('operatingHours').value);
-    
-    const turbineRates = {
-        'saturn20': 400,
-        'centaur40': 1200,
-        'centaur50': 1500,
-        'taurus60': 1400,
-        'custom': parseFloat(document.getElementById('customTurbineRate').value)
-    };
-    
-    const baseRate = turbineRates[turbineSel];
-    
-    if (!baseRate || !loadPercent || !hours) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const adjustedRate = baseRate * (loadPercent / 100);
-    const totalFuel = adjustedRate * hours;
-    const totalBarrels = totalFuel / 159;
-    
-    document.getElementById('fuelResult').innerHTML = `
-        <strong>Fuel Consumption:</strong><br>
-        Base Rate: ${baseRate} L/hr @ 100% load<br>
-        Adjusted Rate: ${adjustedRate.toFixed(1)} L/hr @ ${loadPercent}% load<br>
-        Total for ${hours}hrs: ${totalFuel.toFixed(1)} L (${totalBarrels.toFixed(2)} barrels)<br>
-        Daily Projection: ${(adjustedRate * 24).toFixed(1)} L/day
-    `;
-    document.getElementById('fuelResult').style.display = 'block';
-}
-
-function calculateWeather() {
-    const wind = parseFloat(document.getElementById('windSpeed').value);
-    const wave = parseFloat(document.getElementById('waveHeight').value);
-    const opType = document.getElementById('operationType').value;
-    
-    if (!wind || !wave) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const limits = {
-        'heli': { wind: 40, wave: 1.5 },
-        'boat': { wind: 30, wave: 2.5 },
-        'crane': { wind: 35, wave: 2.0 },
-        'diving': { wind: 20, wave: 1.0 }
-    };
-    
-    const limit = limits[opType];
-    const windStatus = wind <= limit.wind ? '✓ Safe' : '⚠️ Exceeds limit';
-    const waveStatus = wave <= limit.wave ? '✓ Safe' : '⚠️ Exceeds limit';
-    const overall = (wind <= limit.wind && wave <= limit.wave) ? 'PROCEED' : 'STOP - Weather Delay';
-    const color = overall.includes('PROCEED') ? '#059669' : '#dc2626';
-    
-    document.getElementById('weatherResult').innerHTML = `
-        <strong>Weather Impact Assessment:</strong><br>
-        Wind: ${wind} knots (Limit: ${limit.wind}) ${windStatus}<br>
-        Wave: ${wave}m (Limit: ${limit.wave}m) ${waveStatus}<br>
-        Operation: ${opType.toUpperCase()}<br>
-        <strong style="color:${color}">${overall}</strong>
-    `;
-    document.getElementById('weatherResult').style.display = 'block';
-}
-
-// ========================================
-// Custom Input Handlers
-// ========================================
-
-function setupCustomInputs() {
-    // Drum size custom input
-    const drumSize = document.getElementById('drumSize');
-    if (drumSize) {
-        drumSize.addEventListener('change', function() {
-            document.getElementById('customDrumGroup').style.display = this.value === 'custom' ? 'block' : 'none';
-        });
-    }
-    
-    // PPE level custom input
-    const ppeLevel = document.getElementById('ppeLevel');
-    if (ppeLevel) {
-        ppeLevel.addEventListener('change', function() {
-            document.getElementById('customPPEGroup').style.display = this.value === 'custom' ? 'block' : 'none';
-        });
-    }
-    
-    // Crane type custom input
-    const craneType = document.getElementById('craneType');
-    if (craneType) {
-        craneType.addEventListener('change', function() {
-            document.getElementById('customCraneGroup').style.display = this.value === 'custom' ? 'block' : 'none';
-        });
-    }
-    
-    // Turbine type custom input
-    const turbineType = document.getElementById('turbineType');
-    if (turbineType) {
-        turbineType.addEventListener('change', function() {
-            document.getElementById('customTurbineGroup').style.display = this.value === 'custom' ? 'block' : 'none';
-        });
-    }
-}
-
-// ========================================
-// Report Generation Functions
-// ========================================
-
-function generateReport() {
-    const incidentType = document.getElementById('incidentType').value;
-    const location = document.getElementById('reportLocation').value;
-    const reporter = document.getElementById('reporterName').value;
-    const dateTime = document.getElementById('incidentDateTime').value;
-    const description = document.getElementById('incidentDescription').value;
-    const actions = document.getElementById('immediateActions').value;
-    const rootCause = document.getElementById('rootCause').value;
-
-    if (!reporter || !description) {
-        alert('Please fill in at least Reporter Name and Incident Description');
-        return;
-    }
-
-    const reportDate = new Date().toLocaleString('en-GB');
-    const incidentDate = dateTime ? new Date(dateTime).toLocaleString('en-GB') : 'Not specified';
-
-    currentReport = `SAFETY INCIDENT REPORT
-========================
-
-REPORT INFORMATION
-------------------
-Report ID: SR-${Date.now()}
-Generated: ${reportDate}
-Platform: ${location}
-Reporter: ${reporter}
-
-INCIDENT DETAILS
-----------------
-Type: ${incidentType}
-Date & Time: ${incidentDate}
-Location: ${location}
-
-DESCRIPTION
------------
+*Description:*
 ${description}
 
-IMMEDIATE ACTIONS TAKEN
------------------------
-${actions || 'Not specified'}
+*Action Taken:*
+${action}
 
-ROOT CAUSE ANALYSIS
--------------------
-${rootCause || 'Investigation ongoing'}
+*Way Forward:*
+${forward}
 
-REPORT STATUS
--------------
-Status: Preliminary Report
-Classification: ${incidentType}
+Regards,
+Aziz Mohamad - OIM ${platformCode}`;
+            
+            document.getElementById('reportOutput').textContent = report;
+            document.getElementById('reportOutput').classList.remove('hidden');
+            document.getElementById('reportButtons').classList.remove('hidden');
+        }
+        
+        function copyReport() {
+            const reportText = document.getElementById('reportOutput').textContent;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(reportText).then(() => {
+                    alert('Report copied to clipboard!');
+                }).catch(() => {
+                    fallbackCopy(reportText);
+                });
+            } else {
+                fallbackCopy(reportText);
+            }
+        }
+        
+        function copyReportWithPrompt() {
+            const reportText = document.getElementById('reportOutput').textContent;
+            
+            const promptText = `Please refine this safety report to sound professional, human, and written by an experienced Offshore Installation Manager (OIM).
 
----
-Generated by Offshore Smart Hub
-Report must be reviewed and approved by OIM`;
+Requirements:
+- Show full control of operations
+- Clear, concise, assertive communication
+- Suitable for senior stakeholders/boss
+- Natural tone (NOT robotic or overly formal)
+- Keep WhatsApp format (*bold* with asterisks)
+- Maximum 650 words
 
-    document.getElementById('generatedReport').textContent = currentReport;
-    document.getElementById('reportOutput').classList.remove('hidden');
-    document.getElementById('refineSection').classList.add('hidden');
+Current report:
 
-    // Show notification if supported
-    if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Report Generated', {
-            body: `${incidentType} report created successfully`,
-            icon: './icons/icon-192.png'
+${reportText}`;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(promptText).then(() => {
+                    alert('Report + AI Prompt copied! Paste in Claude to refine.');
+                }).catch(() => {
+                    fallbackCopy(promptText);
+                });
+            } else {
+                fallbackCopy(promptText);
+            }
+        }
+        
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                alert('Report copied to clipboard!');
+            } catch (err) {
+                alert('Failed to copy. Please copy manually.');
+            }
+            document.body.removeChild(textarea);
+        }
+        
+        // PWA Installation
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
         });
-    }
-}
-
-function clearReport() {
-    if (confirm('Clear all report fields?')) {
-        document.getElementById('reporterName').value = '';
-        document.getElementById('incidentDateTime').value = '';
-        document.getElementById('incidentDescription').value = '';
-        document.getElementById('immediateActions').value = '';
-        document.getElementById('rootCause').value = '';
-        document.getElementById('reportOutput').classList.add('hidden');
-    }
-}
-
-function downloadReport() {
-    if (!currentReport) return;
-    
-    const blob = new Blob([currentReport], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Safety_Report_${Date.now()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    alert('✓ Report downloaded successfully!');
-}
-
-function copyReport() {
-    if (!currentReport) return;
-    
-    navigator.clipboard.writeText(currentReport).then(() => {
-        alert('✓ Report copied to clipboard!');
-    }).catch(err => {
-        alert('Failed to copy report');
-    });
-}
-
-function showRefinePrompt() {
-    const prompt = `Please refine safety report so that it sounds professional, human, and written in the voice of an experienced Offshore Installation Manager (OIM). The tone must show full control of the operation, clear communication, and be suitable for sharing with my boss or senior stakeholders. Make it concise, assertive, and structured. Avoid robotic or overly formal tone – just confident and natural. Maintain the format as I want to send it via WhatsApp.`;
-    
-    document.getElementById('aiPrompt').textContent = prompt;
-    document.getElementById('refineSection').classList.remove('hidden');
-    
-    // Scroll to refine section
-    document.getElementById('refineSection').scrollIntoView({ behavior: 'smooth' });
-}
-
-function copyPromptAndReport() {
-    const prompt = document.getElementById('aiPrompt').textContent;
-    const fullText = `${prompt}\n\n---\n\n${currentReport}`;
-    
-    navigator.clipboard.writeText(fullText).then(() => {
-        alert('✓ Prompt and report copied! Paste into your AI assistant (ChatGPT, Claude, etc.)');
-    }).catch(err => {
-        alert('Failed to copy');
-    });
-}
-
-// Request notification permission on load
-if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-}
+        
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = 'offshore-smart-hub-v1';
+                    const urlsToCache = ['/'];
+                    
+                    self.addEventListener('install', event => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
+                    });
+                    
+                    self.addEventListener('fetch', event => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(() => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }

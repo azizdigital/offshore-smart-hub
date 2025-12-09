@@ -5,571 +5,515 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <!-- PWA Meta Tags -->
+    <meta name="application-name" content="Offshore Smart Hub">
+    <meta name="description" content="Complete offshore operations companion for PETRONAS installations">
     <meta name="theme-color" content="#3b82f6">
-    <meta name="description" content="Offshore Smart Hub - Complete operations management system with calculators, safety reports, and MOB/DEMOB access">
     
     <!-- Apple iOS Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Offshore Hub">
-    <link rel="apple-touch-icon" href="./icons/icon-180.png">
+    <meta name="apple-mobile-web-app-title" content="Offshore Smart Hub">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
     
-    <!-- PWA Manifest -->
+    <!-- Manifest -->
     <link rel="manifest" href="./manifest.json">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
     
-    <!-- Stylesheet -->
+    <title>Offshore Smart Hub</title>
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="./styles.css">
-    
-    <title>🛡️ Offshore Smart Hub</title>
 </head>
 <body>
-    <!-- Install PWA Prompt -->
-    <div id="installPrompt" class="install-prompt hidden">
-        <div class="icon">📱</div>
-        <div class="content">
-            <h4>Install Offshore Smart Hub</h4>
-            <p>Add to your home screen for offline access</p>
+    <!-- Navigation -->
+    <div class="nav-bar">
+        <div class="nav-header">
+            <h1>🏢 OFFSHORE SMART HUB</h1>
         </div>
-        <button class="btn btn-primary" id="installButton">Install</button>
-        <button class="btn btn-secondary" id="dismissButton">✕</button>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showView('home')">🏠 Home</button>
+            <button class="nav-tab" onclick="showView('mobilization')">✈️ MOB/DEMOB</button>
+            <button class="nav-tab" onclick="showView('calculator')">🔧 Calculators</button>
+            <button class="nav-tab" onclick="showView('report')">📊 Reports</button>
+        </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-container">
-            <button class="nav-button" onclick="showView('home')" id="nav-home">🏠 Home</button>
-            <button class="nav-button" onclick="showView('mobilization')" id="nav-mobilization">🎫 Mobilization</button>
-            <button class="nav-button" onclick="showView('calculator')" id="nav-calculator">🧮 Calculators</button>
-            <button class="nav-button" onclick="showView('report')" id="nav-report">📄 Reports</button>
-        </div>
-    </nav>
-
     <div class="container">
-        <!-- Home View -->
-        <div id="view-home" class="view-section">
-            <div class="header">
-                <h1>🛡️ Offshore Smart Hub</h1>
-                <p>Complete offshore operations management system</p>
-            </div>
-            <div class="menu-grid">
-                <div class="menu-card" onclick="showView('mobilization')">
-                    <div class="card-icon">🎫</div>
-                    <h3>One-Tap Mobilization</h3>
-                    <p>Quick access to MOB/DEMOB systems</p>
-                </div>
-                <div class="menu-card" onclick="showView('calculator')">
-                    <div class="card-icon">🧮</div>
-                    <h3>Engineering Calculators</h3>
-                    <p>12 offshore engineering calculators</p>
-                </div>
-                <div class="menu-card" onclick="showView('report')">
-                    <div class="card-icon">📄</div>
-                    <h3>Safety Reports</h3>
-                    <p>Generate and refine professional reports</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- One-Tap Mobilization View -->
-        <div id="view-mobilization" class="view-section hidden">
-            <div class="header">
-                <h1>🎫 One-Tap Mobilization</h1>
-                <p>Quick access to PETRONAS MOB/DEMOB systems</p>
-            </div>
-
-            <div class="access-grid">
-                <div class="access-card health" onclick="openLink('https://osis.petronas.com/health-declaration/form')">
-                    <div class="card-icon">🏥</div>
-                    <h3>Health Declaration</h3>
-                    <p>Complete before mobilization</p>
-                    <div class="card-badge">Before MOB</div>
-                </div>
-
-                <div class="access-card mob" onclick="openLink('https://qrscan.up.petronas.com/#/home?locationId=ep-ktsb-e-1&locationName=KUALA%20TERENGGANU%20SUPPORT%20BASE%20-%20ENTRANCE')">
-                    <div class="card-icon">✅</div>
-                    <h3>Check-In (MOB)</h3>
-                    <p>KTSB Entrance scan</p>
-                    <div class="card-badge">Mobilization</div>
-                </div>
-
-                <div class="access-card demob" onclick="openLink('https://qrscan.up.petronas.com/#/home?locationId=ep-ktsb-e-2&locationName=KUALA%20TERENGGANU%20SUPPORT%20BASE%20-%20EXIT')">
-                    <div class="card-icon">🚪</div>
-                    <h3>Check-Out (DEMOB)</h3>
-                    <p>KTSB Exit scan</p>
-                    <div class="card-badge">Demobilization</div>
-                </div>
-            </div>
-
-            <div class="card workflow-card">
-                <h4>📋 Quick Workflow</h4>
-                <div class="workflow-steps">
-                    <div class="workflow-step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <div class="step-title">Health Declaration</div>
-                            <div class="step-desc">Complete form 24 hours before mobilization</div>
-                        </div>
+        <!-- HOME VIEW -->
+        <div id="home" class="view active">
+            <div class="card welcome-box">
+                <h2>Welcome to Offshore Smart Hub</h2>
+                <p>Your complete offshore operations companion</p>
+                
+                <div class="quick-access">
+                    <div class="quick-card" onclick="showView('mobilization')">
+                        <h3>📋 MOB/DEMOB System</h3>
+                        <p>Health Declaration & Check-In/Out</p>
                     </div>
-                    <div class="workflow-step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <div class="step-title">Check-In at KTSB</div>
-                            <div class="step-desc">Scan QR at entrance before boarding</div>
-                        </div>
+                    
+                    <div class="quick-card" onclick="showView('calculator')">
+                        <h3>🔧 Engineering Calculators</h3>
+                        <p>12 calculation tools for offshore operations</p>
                     </div>
-                    <div class="workflow-step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <div class="step-title">Check-Out after Return</div>
-                            <div class="step-desc">Scan QR at exit upon demobilization</div>
-                        </div>
+                    
+                    <div class="quick-card" onclick="showView('report')">
+                        <h3>📊 Safety Reports</h3>
+                        <p>Quick reporting system with WhatsApp format</p>
                     </div>
                 </div>
+                
+                <div class="platform-info">
+                    <h3>Platform Coverage</h3>
+                    <ul>
+                        <li>• Irong Barat A (IbA)</li>
+                        <li>• Irong Barat B (IbB)</li>
+                        <li>• Irong Barat C (IbC)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer">
+                Developed for PETRONAS Offshore Operations<br>
+                Offshore Installation Manager Tool
             </div>
         </div>
 
-        <!-- Calculator View -->
-        <div id="view-calculator" class="view-section hidden">
-            <div class="header">
-                <h1>🧮 Engineering Calculators</h1>
-                <p>Complete collection of 12 offshore calculators</p>
-            </div>
-
-            <div class="calc-container">
-                <!-- Volume Conversion -->
-                <div class="card">
-                    <h3>📊 Volume Conversion</h3>
-                    <div class="form-group">
-                        <label>Input Value</label>
-                        <input type="number" id="volumeInput" class="form-control" placeholder="Value" step="0.001">
-                    </div>
-                    <div class="form-group">
-                        <label>Conversion Type</label>
-                        <select id="volumeType" class="form-control">
-                            <option value="kld_kbd">KLD to KBD</option>
-                            <option value="kbd_kld">KBD to KLD</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Shrinkage Factor</label>
-                        <input type="number" id="shrinkageFactor" class="form-control" placeholder="0.881" step="0.001" value="0.881">
-                    </div>
-                    <button class="btn btn-primary" onclick="convertVolume()">🔄 Convert</button>
-                    <div id="volumeResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Universal Unit Converter -->
-                <div class="card">
-                    <h3>📏 Universal Unit Converter</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>From</label>
-                            <select id="fromUnit" class="form-control">
-                                <optgroup label="Pressure">
-                                    <option value="kpa">KpA</option>
-                                    <option value="psi">PSI</option>
-                                    <option value="bar">Bar</option>
-                                </optgroup>
-                                <optgroup label="Temperature">
-                                    <option value="celsius">°C</option>
-                                    <option value="fahrenheit">°F</option>
-                                </optgroup>
-                                <optgroup label="Length">
-                                    <option value="inches">Inches</option>
-                                    <option value="cm">cm</option>
-                                    <option value="feet">Feet</option>
-                                    <option value="meters">Meters</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>To</label>
-                            <select id="toUnit" class="form-control">
-                                <optgroup label="Pressure">
-                                    <option value="kpa">KpA</option>
-                                    <option value="psi">PSI</option>
-                                    <option value="bar">Bar</option>
-                                </optgroup>
-                                <optgroup label="Temperature">
-                                    <option value="celsius">°C</option>
-                                    <option value="fahrenheit">°F</option>
-                                </optgroup>
-                                <optgroup label="Length">
-                                    <option value="inches">Inches</option>
-                                    <option value="cm">cm</option>
-                                    <option value="feet">Feet</option>
-                                    <option value="meters">Meters</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Input Value</label>
-                        <input type="number" id="universalValue" class="form-control" placeholder="Enter value">
-                    </div>
-                    <button class="btn btn-primary" onclick="convertUniversal()">↔️ Convert</button>
-                    <div id="universalResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Gas Conversion -->
-                <div class="card">
-                    <h3>⛽ Gas Flow Conversion</h3>
-                    <div class="form-group">
-                        <label>Input Value</label>
-                        <input type="number" id="gasInput" class="form-control" placeholder="Value" step="0.001">
-                    </div>
-                    <div class="form-group">
-                        <label>Conversion Type</label>
-                        <select id="gasType" class="form-control">
-                            <option value="km3_mmscf">km³/d to mmscf/d</option>
-                            <option value="mmscf_km3">mmscf/d to km³/d</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary" onclick="convertGas()">🔄 Convert</button>
-                    <div id="gasResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Crude Oil Drop Rate -->
-                <div class="card">
-                    <h3>💧 Crude Oil Leak (Drop Rate)</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Drops per Minute</label>
-                            <input type="number" id="dropRate" class="form-control" placeholder="60" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Duration (minutes)</label>
-                            <input type="number" id="dropDuration" class="form-control" placeholder="120" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Drop Size</label>
-                            <select id="dropSize" class="form-control">
-                                <option value="0.05">Small (~0.05ml)</option>
-                                <option value="0.1">Medium (~0.1ml)</option>
-                                <option value="0.2">Large (~0.2ml)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateDropLeak()">📊 Calculate</button>
-                    <div id="dropLeakResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Natural Gas Leak -->
-                <div class="card">
-                    <h3>⛽ Natural Gas Leak</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Diameter (mm)</label>
-                            <input type="number" id="gasHoleDiameter" class="form-control" placeholder="5" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Pressure (bar)</label>
-                            <input type="number" id="gasPressure" class="form-control" placeholder="50" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Duration (minutes)</label>
-                            <input type="number" id="gasDuration" class="form-control" placeholder="10" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Temperature (°C)</label>
-                            <input type="number" id="gasTemperature" class="form-control" placeholder="35" step="1">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateGasLeak()">📊 Calculate</button>
-                    <div id="gasLeakResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Crude Oil Pin Hole Leak -->
-                <div class="card">
-                    <h3>🛢️ Crude Oil Leak (Pin Hole)</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Diameter (mm)</label>
-                            <input type="number" id="oilHoleDiameter" class="form-control" placeholder="2" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Pressure (bar)</label>
-                            <input type="number" id="oilPressure" class="form-control" placeholder="56" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Duration (minutes)</label>
-                            <input type="number" id="oilDuration" class="form-control" placeholder="25" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Density (kg/m³)</label>
-                            <input type="number" id="oilDensity" class="form-control" placeholder="700" step="1">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateOilLeak()">📊 Calculate</button>
-                    <div id="oilLeakResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Production Volume Loss -->
-                <div class="card">
-                    <h3>📉 Production Volume Loss</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Shutdown Hours</label>
-                            <input type="number" id="shutdownHours" class="form-control" placeholder="2" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Shutdown Minutes</label>
-                            <input type="number" id="shutdownMinutes" class="form-control" placeholder="30" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Normal Production (KBD)</label>
-                            <input type="number" id="normalProduction" class="form-control" placeholder="750" step="0.1">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateProductionLoss()">📊 Calculate</button>
-                    <div id="productionLossResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Chemical Injection Rate -->
-                <div class="card">
-                    <h3>🧪 Chemical Injection Rate</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Injection Rate (L/hr)</label>
-                            <input type="number" id="injectionRate" class="form-control" placeholder="2.5" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Concentration (PPM)</label>
-                            <input type="number" id="chemPPM" class="form-control" placeholder="100" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Drum Size</label>
-                            <select id="drumSize" class="form-control">
-                                <option value="159">159L Drum</option>
-                                <option value="210">210L Drum</option>
-                                <option value="259">259L Drum</option>
-                                <option value="custom">Custom Size</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="customDrumGroup" style="display:none">
-                            <label>Custom Size (L)</label>
-                            <input type="number" id="customDrumSize" class="form-control" placeholder="200">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateChemical()">📊 Calculate</button>
-                    <div id="chemicalResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Drop Object Calculator -->
-                <div class="card">
-                    <h3>⬇️ Drop Object Calculator</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Object Weight (kg)</label>
-                            <input type="number" id="objectWeight" class="form-control" placeholder="5" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Drop Height (m)</label>
-                            <input type="number" id="dropHeight" class="form-control" placeholder="10" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>PPE Level</label>
-                            <select id="ppeLevel" class="form-control">
-                                <option value="1">Basic (Hard Hat)</option>
-                                <option value="0.7">Enhanced (+ Safety Vest)</option>
-                                <option value="0.5">Full PPE</option>
-                                <option value="custom">Custom Factor</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="customPPEGroup" style="display:none">
-                            <label>Custom PPE Factor</label>
-                            <input type="number" id="customPPEFactor" class="form-control" placeholder="0.3" step="0.1">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateDropObject()">📊 Calculate</button>
-                    <div id="dropObjectResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Crane Lifting Calculator -->
-                <div class="card">
-                    <h3>🏗️ Crane Lifting Calculator</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Load Weight (tonnes)</label>
-                            <input type="number" id="loadWeight" class="form-control" placeholder="15" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Boom Length (m)</label>
-                            <input type="number" id="boomLength" class="form-control" placeholder="25" step="0.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Crane Type</label>
-                            <select id="craneType" class="form-control">
-                                <option value="40">40T Crane</option>
-                                <option value="9">9T Crane</option>
-                                <option value="13">13T Crane</option>
-                                <option value="custom">Custom Capacity</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="customCraneGroup" style="display:none">
-                            <label>Custom Capacity (T)</label>
-                            <input type="number" id="customCraneCapacity" class="form-control" placeholder="50">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateCrane()">📊 Calculate</button>
-                    <div id="craneResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Fuel Consumption -->
-                <div class="card">
-                    <h3>⛽ Fuel Consumption</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Turbine Type</label>
-                            <select id="turbineType" class="form-control">
-                                <option value="saturn20">Saturn 20 (1.2MW)</option>
-                                <option value="centaur40">Centaur 40 (4.0MW)</option>
-                                <option value="centaur50">Centaur 50 (5.0MW)</option>
-                                <option value="taurus60">Taurus 60 (4.8MW)</option>
-                                <option value="custom">Custom Turbine</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="customTurbineGroup" style="display:none">
-                            <label>Custom Fuel Rate (L/hr)</label>
-                            <input type="number" id="customTurbineRate" class="form-control" placeholder="2000" step="10">
-                        </div>
-                        <div class="form-group">
-                            <label>Load Percentage (%)</label>
-                            <input type="number" id="turbineLoad" class="form-control" placeholder="75" step="1" min="0" max="100">
-                        </div>
-                        <div class="form-group">
-                            <label>Operating Hours</label>
-                            <input type="number" id="operatingHours" class="form-control" placeholder="24" step="0.1">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateFuel()">📊 Calculate</button>
-                    <div id="fuelResult" class="calc-result" style="display:none"></div>
-                </div>
-
-                <!-- Weather Impact -->
-                <div class="card">
-                    <h3>🌊 Weather Impact Assessment</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Wind Speed (knots)</label>
-                            <input type="number" id="windSpeed" class="form-control" placeholder="25" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Wave Height (m)</label>
-                            <input type="number" id="waveHeight" class="form-control" placeholder="2.5" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Operation Type</label>
-                            <select id="operationType" class="form-control">
-                                <option value="heli">Helicopter Ops</option>
-                                <option value="boat">Boat Transfer</option>
-                                <option value="crane">Crane Operations</option>
-                                <option value="diving">Diving Operations</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="calculateWeather()">📊 Calculate</button>
-                    <div id="weatherResult" class="calc-result" style="display:none"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Safety Report View -->
-        <div id="view-report" class="view-section hidden">
-            <div class="header">
-                <h1>📄 Safety Report Generator</h1>
-                <p>Generate professional safety reports with AI refinement</p>
-            </div>
-
+        <!-- MOB/DEMOB VIEW -->
+        <div id="mobilization" class="view">
             <div class="card">
-                <h3>📝 Report Details</h3>
-                <div class="form-grid">
+                <div class="card-title">📋 Health Declaration Form (MOB)</div>
+                <div class="card-description">Complete your health declaration before mobilization to platform</div>
+                <a href="https://osis.petronas.com/health-declaration/form" target="_blank" class="btn btn-primary">📝 Open Health Declaration Form</a>
+            </div>
+            
+            <div class="card border-green">
+                <div class="card-title">✈️ MyPET Check-In (MOB)</div>
+                <div class="card-subtitle">KTSB Entrance - Mobilization</div>
+                <ol>
+                    <li>Complete health declaration first</li>
+                    <li>Arrive at KTSB entrance</li>
+                    <li>Click button below to check-in</li>
+                </ol>
+                <a href="https://qrscan.up.petronas.com/#/home?locationId=ep-ktsb-e-1&locationName=KUALA%20TERENGGANU%20SUPPORT%20BASE%20-%20ENTRANCE" target="_blank" class="btn btn-green">✅ Check-In at KTSB Entrance</a>
+            </div>
+            
+            <div class="card border-orange">
+                <div class="card-title">🚁 MyPET Check-Out (DEMOB)</div>
+                <div class="card-subtitle">KTSB Exit - Demobilization</div>
+                <ol>
+                    <li>Complete offshore handover</li>
+                    <li>Arrive at KTSB exit gate</li>
+                    <li>Click button below to check-out</li>
+                </ol>
+                <a href="https://qrscan.up.petronas.com/#/home?locationId=ep-ktsb-e-2&locationName=KUALA%20TERENGGANU%20SUPPORT%20BASE%20-%20EXIT" target="_blank" class="btn btn-orange">👋 Check-Out at KTSB Exit</a>
+            </div>
+        </div>
+
+        <!-- CALCULATOR VIEW -->
+        <div id="calculator" class="view">
+            <div class="grid grid-3">
+                <!-- Calculator 1: Volume Conversion -->
+                <div class="card">
+                    <div class="card-title">1. Volume Conversion</div>
                     <div class="form-group">
-                        <label>Incident Type</label>
-                        <select id="incidentType" class="form-control">
-                            <option value="Near Miss">Near Miss</option>
-                            <option value="First Aid">First Aid</option>
-                            <option value="Medical Treatment">Medical Treatment</option>
-                            <option value="Lost Time Injury">Lost Time Injury</option>
-                            <option value="Equipment Failure">Equipment Failure</option>
-                            <option value="Environmental">Environmental</option>
-                            <option value="Safety Observation">Safety Observation</option>
+                        <label class="form-label">Value</label>
+                        <input type="number" id="volumeInput" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Conversion Type</label>
+                        <select id="volumeType" class="form-select">
+                            <option value="kld_kbd">KLD → KBD</option>
+                            <option value="kbd_kld">KBD → KLD</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Platform/Location</label>
-                        <input type="text" id="reportLocation" class="form-control" placeholder="e.g., Irong Barat A" value="Irong Barat A">
+                        <label class="form-label">Shrinkage Factor</label>
+                        <input type="number" id="shrinkageFactor" class="form-input" value="0.881" step="0.001">
+                    </div>
+                    <button onclick="convertVolume()" class="btn btn-primary">Calculate</button>
+                    <div id="volumeResult" class="result-box result-primary"></div>
+                </div>
+
+                <!-- Calculator 2: Universal Unit Converter -->
+                <div class="card">
+                    <div class="card-title">2. Universal Unit Converter</div>
+                    <div class="form-group">
+                        <label class="form-label">From Unit</label>
+                        <select id="fromUnit" class="form-select">
+                            <option value="kpa">kPa</option>
+                            <option value="psi">PSI</option>
+                            <option value="bar">Bar</option>
+                            <option value="celsius">°C</option>
+                            <option value="fahrenheit">°F</option>
+                            <option value="inches">Inches</option>
+                            <option value="cm">cm</option>
+                            <option value="feet">Feet</option>
+                            <option value="meters">Meters</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Reporter Name</label>
-                        <input type="text" id="reporterName" class="form-control" placeholder="Your name">
+                        <label class="form-label">To Unit</label>
+                        <select id="toUnit" class="form-select">
+                            <option value="psi">PSI</option>
+                            <option value="kpa">kPa</option>
+                            <option value="bar">Bar</option>
+                            <option value="celsius">°C</option>
+                            <option value="fahrenheit">°F</option>
+                            <option value="inches">Inches</option>
+                            <option value="cm">cm</option>
+                            <option value="feet">Feet</option>
+                            <option value="meters">Meters</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Date & Time</label>
-                        <input type="datetime-local" id="incidentDateTime" class="form-control">
+                        <label class="form-label">Value</label>
+                        <input type="number" id="universalValue" class="form-input" step="any">
                     </div>
+                    <button onclick="convertUniversal()" class="btn btn-primary">Convert</button>
+                    <div id="universalResult" class="result-box result-primary"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>Incident Description</label>
-                    <div class="textarea-wrapper">
-                        <textarea id="incidentDescription" class="form-control" placeholder="Describe what happened in detail..."></textarea>
-                        <button class="handwriting-toggle" onclick="toggleHandwriting('incidentDescription')" title="Toggle handwriting mode">✍️</button>
+                <!-- Calculator 3: Gas Flow Conversion -->
+                <div class="card">
+                    <div class="card-title">3. Gas Flow Conversion</div>
+                    <div class="form-group">
+                        <label class="form-label">Value</label>
+                        <input type="number" id="gasInput" class="form-input" step="any">
                     </div>
-                    <div id="canvas-incidentDescription" class="handwriting-canvas hidden"></div>
+                    <div class="form-group">
+                        <label class="form-label">Conversion Type</label>
+                        <select id="gasType" class="form-select">
+                            <option value="km3_mmscf">km³/d → mmscf/d</option>
+                            <option value="mmscf_km3">mmscf/d → km³/d</option>
+                        </select>
+                    </div>
+                    <button onclick="convertGas()" class="btn btn-primary">Convert</button>
+                    <div id="gasResult" class="result-box result-primary"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>Immediate Actions Taken</label>
-                    <div class="textarea-wrapper">
-                        <textarea id="immediateActions" class="form-control" placeholder="What actions were taken immediately..."></textarea>
-                        <button class="handwriting-toggle" onclick="toggleHandwriting('immediateActions')" title="Toggle handwriting mode">✍️</button>
+                <!-- Calculator 4: Crude Oil Leak (Drop Rate) -->
+                <div class="card">
+                    <div class="card-title">4. Crude Oil Leak (Drop Rate)</div>
+                    <div class="form-group">
+                        <label class="form-label">Drops per Minute</label>
+                        <input type="number" id="dropRate" class="form-input" step="any">
                     </div>
-                    <div id="canvas-immediateActions" class="handwriting-canvas hidden"></div>
+                    <div class="form-group">
+                        <label class="form-label">Duration (minutes)</label>
+                        <input type="number" id="dropDuration" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Drop Size</label>
+                        <select id="dropSize" class="form-select">
+                            <option value="0.05">Small (~0.05ml)</option>
+                            <option value="0.1">Medium (~0.1ml)</option>
+                            <option value="0.2">Large (~0.2ml)</option>
+                        </select>
+                    </div>
+                    <button onclick="calculateDropLeak()" class="btn btn-primary">Calculate</button>
+                    <div id="dropLeakResult" class="result-box result-primary"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>Root Cause Analysis</label>
-                    <div class="textarea-wrapper">
-                        <textarea id="rootCause" class="form-control" placeholder="Identified root causes..."></textarea>
-                        <button class="handwriting-toggle" onclick="toggleHandwriting('rootCause')" title="Toggle handwriting mode">✍️</button>
+                <!-- Calculator 5: Natural Gas Leak -->
+                <div class="card">
+                    <div class="card-title">5. Natural Gas Leak</div>
+                    <div class="form-group">
+                        <label class="form-label">Diameter (mm)</label>
+                        <input type="number" id="gasHoleDiameter" class="form-input" step="any">
                     </div>
-                    <div id="canvas-rootCause" class="handwriting-canvas hidden"></div>
+                    <div class="form-group">
+                        <label class="form-label">Pressure (bar)</label>
+                        <input type="number" id="gasPressure" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Duration (min)</label>
+                        <input type="number" id="gasDuration" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Temperature (°C)</label>
+                        <input type="number" id="gasTemperature" class="form-input" value="35" step="any">
+                    </div>
+                    <button onclick="calculateGasLeak()" class="btn btn-primary">Calculate</button>
+                    <div id="gasLeakResult" class="result-box result-primary"></div>
                 </div>
 
-                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
-                    <button class="btn btn-primary" onclick="generateReport()">📝 Generate Report</button>
-                    <button class="btn btn-secondary" onclick="clearReport()">🔄 Clear</button>
+                <!-- Calculator 6: Crude Oil Leak (Pin Hole) -->
+                <div class="card">
+                    <div class="card-title">6. Crude Oil Leak (Pin Hole)</div>
+                    <div class="form-group">
+                        <label class="form-label">Diameter (mm)</label>
+                        <input type="number" id="oilHoleDiameter" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pressure (bar)</label>
+                        <input type="number" id="oilPressure" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Duration (min)</label>
+                        <input type="number" id="oilDuration" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Density (kg/m³)</label>
+                        <input type="number" id="oilDensity" class="form-input" value="700" step="any">
+                    </div>
+                    <button onclick="calculateOilLeak()" class="btn btn-primary">Calculate</button>
+                    <div id="oilLeakResult" class="result-box result-primary"></div>
+                    <div id="thresholdResult" class="result-box result-warning"></div>
+                </div>
+
+                <!-- Calculator 7: Production Volume Loss -->
+                <div class="card">
+                    <div class="card-title">7. Production Volume Loss</div>
+                    <div class="form-group">
+                        <label class="form-label">Shutdown Hours</label>
+                        <input type="number" id="shutdownHours" class="form-input" step="any" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Shutdown Minutes</label>
+                        <input type="number" id="shutdownMinutes" class="form-input" step="any" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Normal Production (KBD)</label>
+                        <input type="number" id="normalProduction" class="form-input" step="any">
+                    </div>
+                    <button onclick="calculateProductionLoss()" class="btn btn-primary">Calculate</button>
+                    <div id="productionLossResult" class="result-box result-primary"></div>
+                </div>
+
+                <!-- Calculator 8: Chemical Injection Rate -->
+                <div class="card">
+                    <div class="card-title">8. Chemical Injection Rate</div>
+                    <div class="form-group">
+                        <label class="form-label">Injection Rate (L/hr)</label>
+                        <input type="number" id="injectionRate" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Concentration (PPM)</label>
+                        <input type="number" id="chemPPM" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Drum Size</label>
+                        <select id="drumSize" class="form-select" onchange="toggleCustomDrum()">
+                            <option value="159">159L Drum</option>
+                            <option value="210">210L Drum</option>
+                            <option value="259">259L Drum</option>
+                            <option value="custom">Custom Size</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="customDrumGroup">
+                        <label class="form-label">Custom Drum Size (L)</label>
+                        <input type="number" id="customDrumSize" class="form-input" step="any">
+                    </div>
+                    <button onclick="calculateChemical()" class="btn btn-primary">Calculate</button>
+                    <div id="chemicalResult" class="result-box result-primary"></div>
+                </div>
+
+                <!-- Calculator 9: Drop Object Calculator -->
+                <div class="card">
+                    <div class="card-title">9. Drop Object Calculator</div>
+                    <div class="form-group">
+                        <label class="form-label">Object Weight (kg)</label>
+                        <input type="number" id="objectWeight" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Drop Height (m)</label>
+                        <input type="number" id="dropHeight" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">PPE Level</label>
+                        <select id="ppeLevel" class="form-select" onchange="toggleCustomPPE()">
+                            <option value="1">Basic (Hard Hat)</option>
+                            <option value="0.7">Enhanced (+ Safety Vest)</option>
+                            <option value="0.5">Full PPE</option>
+                            <option value="custom">Custom Factor</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="customPPEGroup">
+                        <label class="form-label">Custom PPE Factor</label>
+                        <input type="number" id="customPPEFactor" class="form-input" step="0.1">
+                    </div>
+                    <button onclick="calculateDropObject()" class="btn btn-primary">Calculate</button>
+                    <div id="dropObjectResult" class="result-box result-primary"></div>
+                </div>
+
+                <!-- Calculator 10: Crane Lifting Calculator -->
+                <div class="card">
+                    <div class="card-title">10. Crane Lifting Calculator</div>
+                    <div class="form-group">
+                        <label class="form-label">Load Weight (tonnes)</label>
+                        <input type="number" id="loadWeight" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Boom Length (m)</label>
+                        <input type="number" id="boomLength" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Crane Type</label>
+                        <select id="craneType" class="form-select" onchange="toggleCustomCrane()">
+                            <option value="40">40T (IbA - ME 450)</option>
+                            <option value="9">9T (IbA - ME 400)</option>
+                            <option value="13">13T (IbB - ME 290)</option>
+                            <option value="13">13T (IbC - ME 290)</option>
+                            <option value="custom">Custom Capacity</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="customCraneGroup">
+                        <label class="form-label">Custom Capacity (tonnes)</label>
+                        <input type="number" id="customCraneCapacity" class="form-input" step="any">
+                    </div>
+                    <button onclick="calculateCrane()" class="btn btn-primary">Calculate</button>
+                    <div id="craneResult" class="result-box result-primary"></div>
+                </div>
+
+                <!-- Calculator 11: Fuel Consumption -->
+                <div class="card">
+                    <div class="card-title">11. Fuel Consumption</div>
+                    <div class="form-group">
+                        <label class="form-label">Turbine Type</label>
+                        <select id="turbineType" class="form-select" onchange="toggleCustomTurbine()">
+                            <option value="saturn20">Saturn 20 (1.2MW)</option>
+                            <option value="centaur40">Centaur 40 (4.0MW)</option>
+                            <option value="centaur50">Centaur 50 (5.0MW)</option>
+                            <option value="taurus60">Taurus 60 (4.8MW)</option>
+                            <option value="taurus70">Taurus 70 (7.7MW)</option>
+                            <option value="mars90">Mars 90 (9.8MW)</option>
+                            <option value="mars100">Mars 100 (12MW)</option>
+                            <option value="titan130">Titan 130 (13.5MW)</option>
+                            <option value="rb211">RB211 (Rolls-Royce)</option>
+                            <option value="kongsberg">Kongsberg Engine</option>
+                            <option value="custom">Custom Turbine</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="customTurbineGroup">
+                        <label class="form-label">Custom Fuel Rate (L/hr)</label>
+                        <input type="number" id="customTurbineRate" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Load Percentage (%)</label>
+                        <input type="number" id="turbineLoad" class="form-input" step="any" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Operating Hours</label>
+                        <input type="number" id="operatingHours" class="form-input" step="any">
+                    </div>
+                    <button onclick="calculateFuel()" class="btn btn-primary">Calculate</button>
+                    <div id="fuelResult" class="result-box result-primary"></div>
+                </div>
+
+                <!-- Calculator 12: Weather Impact -->
+                <div class="card">
+                    <div class="card-title">12. Weather Impact</div>
+                    <div class="form-group">
+                        <label class="form-label">Wind Speed (knots)</label>
+                        <input type="number" id="windSpeed" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Wave Height (m)</label>
+                        <input type="number" id="waveHeight" class="form-input" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Operation Type</label>
+                        <select id="operationType" class="form-select" onchange="toggleCustomWeather()">
+                            <option value="heli">Helicopter Ops</option>
+                            <option value="boat">Boat Transfer</option>
+                            <option value="crane">Crane Operations</option>
+                            <option value="diving">Diving Operations</option>
+                            <option value="custom">Custom Operation</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="customWeatherGroup">
+                        <label class="form-label">Custom Wind Limit (knots)</label>
+                        <input type="number" id="customWindLimit" class="form-input" step="any">
+                        <label class="form-label" style="margin-top:10px">Custom Wave Limit (m)</label>
+                        <input type="number" id="customWaveLimit" class="form-input" step="any">
+                    </div>
+                    <button onclick="calculateWeather()" class="btn btn-primary">Calculate</button>
+                    <div id="weatherResult" class="result-box result-primary"></div>
                 </div>
             </div>
+        </div>
 
-            <div id="reportOutput" class="hidden">
-                <div class="card">
-                    <h3>📄 Generated Report</h3>
-                    <div class="report-box">
-                        <div id="generatedReport" class="report-text"></div>
-                    </div>
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-                        <button class="btn btn-success" onclick="downloadReport()">💾 Download Report</button>
-                        <button class="btn btn-warning" onclick="showRefinePrompt()">✨ Refine with AI</button>
-                        <button class="btn btn-info" onclick="copyReport()">📋 Copy Report</button>
-                    </div>
+        <!-- REPORT VIEW -->
+        <div id="report" class="view">
+            <div class="card">
+                <div class="card-title">Safety Report Generator</div>
+                
+                <div class="form-group">
+                    <label class="form-label">Report Type</label>
+                    <select id="reportType" class="form-select">
+                        <option value="LOPC">LOPC (Loss of Primary Containment)</option>
+                        <option value="Emergency / Fire Alarm">Emergency / Fire Alarm</option>
+                        <option value="Medical Case">Medical Case</option>
+                        <option value="Near Miss">Near Miss</option>
+                        <option value="Incident/Accident">Incident/Accident</option>
+                    </select>
                 </div>
-
-                <div id="refineSection" class="hidden">
-                    <div class="card">
-                        <h3>✨ AI Refinement Prompt</h3>
-                        <div class="prompt-box">
-                            <div class="prompt-text" id="aiPrompt"></div>
-                            <button class="btn btn-primary" onclick="copyPromptAndReport()">📋 Copy Prompt + Report</button>
-                        </div>
-                        <div class="alert alert-info">
-                            <strong>💡 Instructions:</strong> Click the button above to copy both the prompt and your report. Then paste it into ChatGPT, Claude, or any AI model to get a refined, professional version suitable for WhatsApp or email to your boss.
-                        </div>
-                    </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Platform</label>
+                    <select id="reportPlatform" class="form-select">
+                        <option value="Irong Barat A (IbA)">Irong Barat A (IbA)</option>
+                        <option value="Irong Barat B (IbB)">Irong Barat B (IbB)</option>
+                        <option value="Irong Barat C (IbC)">Irong Barat C (IbC)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Module/Area</label>
+                    <input type="text" id="reportModule" class="form-input" placeholder="e.g., Living Quarter, Process Area">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Incident Title</label>
+                    <input type="text" id="reportTitle" class="form-input" placeholder="Brief title of the incident">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" id="reportDate" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Time</label>
+                    <input type="time" id="reportTime" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Brief Description
+                        <button onclick="toggleHandwriting('reportDescription')" class="handwriting-icon-btn" title="Toggle handwriting mode">✍️</button>
+                    </label>
+                    <textarea id="reportDescription" class="form-textarea" placeholder="Describe what happened..."></textarea>
+                    <div id="canvas-reportDescription" class="canvas-container hidden"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Action Taken
+                        <button onclick="toggleHandwriting('reportAction')" class="handwriting-icon-btn" title="Toggle handwriting mode">✍️</button>
+                    </label>
+                    <textarea id="reportAction" class="form-textarea" placeholder="Immediate actions taken..."></textarea>
+                    <div id="canvas-reportAction" class="canvas-container hidden"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Way Forward
+                        <button onclick="toggleHandwriting('reportForward')" class="handwriting-icon-btn" title="Toggle handwriting mode">✍️</button>
+                    </label>
+                    <textarea id="reportForward" class="form-textarea" placeholder="Next steps and recommendations..."></textarea>
+                    <div id="canvas-reportForward" class="canvas-container hidden"></div>
+                </div>
+                
+                <button onclick="generateReport()" class="btn btn-primary">Generate Report</button>
+                
+                <div id="reportOutput" class="report-output hidden"></div>
+                
+                <div id="reportButtons" class="hidden" style="display: flex; gap: 12px; margin-top: 16px;">
+                    <button onclick="copyReport()" class="btn btn-secondary" style="flex: 1;">📋 Copy Report</button>
+                    <button onclick="copyReportWithPrompt()" class="btn btn-primary" style="flex: 1;">✨ Refine with AI</button>
                 </div>
             </div>
         </div>
@@ -577,8 +521,31 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-    <script src="./app.js"></script>
     <script src="./handwriting.js"></script>
-    <script src="./pwa.js"></script>
+    <script src="./app.js"></script>
+    
+    <!-- PWA Registration -->
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+        
+        // Install prompt for PWA
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('PWA install prompt ready');
+        });
+    </script>
 </body>
 </html>

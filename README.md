@@ -1,218 +1,123 @@
-# 🛡️ Offshore Smart Hub
+# 🏢 Offshore Smart Hub PWA
 
-**Complete Progressive Web App for Offshore Operations Management**
+Complete offshore operations companion for PETRONAS installations - optimized for iPhone, iPad, and Android devices.
 
 ## 📱 Features
 
-### 🎫 One-Tap Mobilization
-Quick access to PETRONAS MOB/DEMOB systems:
-- Health Declaration Form (Pre-MOB)
-- MyPET Check-In (Mobilization)
-- MyPET Check-Out (Demobilization)
-- Step-by-step workflow guide
+### MOB/DEMOB System
+- **Health Declaration Form** - Complete health screening before mobilization
+- **MyPET Check-In** - KTSB entrance registration (ep-ktsb-e-1)
+- **MyPET Check-Out** - KTSB exit registration (ep-ktsb-e-2)
 
-### 🧮 Engineering Calculators (12 Total)
+### 12 Engineering Calculators
 1. **Volume Conversion** - KLD ↔ KBD with shrinkage factor
-2. **Universal Unit Converter** - Pressure, Temperature, Length
+2. **Universal Unit Converter** - Pressure, temperature, length conversions
 3. **Gas Flow Conversion** - km³/d ↔ mmscf/d
-4. **Crude Oil Leak (Drop Rate)** - Drop rate analysis
-5. **Natural Gas Leak** - Pin hole gas leak calculation
-6. **Crude Oil Leak (Pin Hole)** - With reporting threshold
-7. **Production Volume Loss** - Shutdown impact calculation
-8. **Chemical Injection Rate** - Drum usage projection
-9. **Drop Object Calculator** - Impact energy with PPE
-10. **Crane Lifting Calculator** - Utilization & safety factor
-11. **Fuel Consumption** - Turbine consumption projection
-12. **Weather Impact Assessment** - Wind & wave operation limits
+4. **Crude Oil Leak (Drop Rate)** - Calculate leak rate from drops per minute
+5. **Natural Gas Leak** - Pin hole leak calculations
+6. **Crude Oil Leak (Pin Hole)** - With LOPC tier classification
+7. **Production Volume Loss** - Calculate production loss from downtime
+8. **Chemical Injection Rate** - Drum requirements calculation
+9. **Drop Object Calculator** - Impact energy with PPE factors
+10. **Crane Lifting Calculator** - Safe load calculations for platform cranes
+11. **Fuel Consumption** - Turbine fuel requirements
+12. **Weather Impact** - Operation limits for wind and waves
 
-### 📄 Safety Reports
-- Professional incident report generation
-- **AI Refinement Feature** - Copy prompt + report for AI polishing
-- Multiple incident types supported
-- Download as .txt file
-- Copy to clipboard
-- **Apple Pencil Support** for handwriting notes (iPad)
+### Safety Report Generator
+- 5 report types: LOPC, Emergency/Fire Alarm, Medical Case, Near Miss, Incident/Accident
+- 3 platforms: Irong Barat A, B, C
+- WhatsApp-ready format with proper formatting
+- AI refinement option (650 words max)
+- One-click copy to clipboard
+- **Handwriting support with Apple Pencil**:
+  - Toggle between Type/Write modes
+  - Color picker (Black, Blue, Red, Green)
+  - Pen size options (Fine, Medium, Thick)
+  - Undo, Clear, and Save functions
+  - Pressure sensitivity support
+  - Saves as base64 images in localStorage
 
-### ✨ PWA Features
-- ✅ Install to home screen (iOS & Android)
-- ✅ Offline capability
-- ✅ Push notifications
-- ✅ App shortcuts
-- ✅ Standalone app experience
-- ✅ Background sync
+## 🚀 Installation
 
-## 🎨 Apple Pencil Support
+### For iPhone/iPad:
+1. Open Safari and navigate to the app URL
+2. Tap the Share button (box with arrow)
+3. Scroll down and tap "Add to Home Screen"
+4. Tap "Add" in the top right corner
+5. App icon will appear on your home screen
 
-**Handwriting Mode for Safety Reports:**
-- Toggle between Type/Write modes with ✍️ button
-- Color picker: Black, Blue, Red, Green
-- Pen size: Fine, Medium, Thick
-- Undo, Clear, and Save functions
-- Pressure sensitivity support
-- Saves as base64 images in localStorage
-
-**Usage:**
-1. Tap ✍️ button on any textarea
-2. Write with Apple Pencil or finger
-3. Choose colors and pen sizes
-4. Tap "💾 Save" to convert to image
-5. Switches back to type mode automatically
-
-## 📦 Installation
-
-### iPhone/iPad:
-1. Open `index.html` in **Safari** (must use Safari!)
-2. Tap Share button (□↑)
-3. Select "Add to Home Screen"
+### For Android:
+1. Open Chrome and navigate to the app URL
+2. Tap the three dots menu
+3. Tap "Add to Home Screen"
 4. Tap "Add"
-5. Launch from home screen
+5. App icon will appear on your home screen
 
-### Android:
-1. Open `index.html` in Chrome
-2. Tap "Install" banner or menu → "Install app"
-3. Confirm installation
-4. Launch from home screen
+## 💻 Platform Coverage
 
-## 🚀 Deployment to GitHub Pages
-
-See [QUICKSTART.md](QUICKSTART.md) for 3-step deployment  
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed guide
-
-## 📁 Project Structure
-
-```
-offshore-smart-hub/
-├── index.html          # Main HTML structure
-├── styles.css          # All styling + responsive design
-├── app.js              # Calculators + report functions
-├── handwriting.js      # Apple Pencil module
-├── pwa.js              # PWA installation features
-├── sw.js               # Service worker (offline)
-├── manifest.json       # PWA configuration
-├── icons/              # App icons (180, 192, 512px)
-│   ├── icon-180.png.svg
-│   ├── icon-192.png.svg
-│   ├── icon-512.png.svg
-│   └── generate-icons.html
-├── README.md           # This file
-├── QUICKSTART.md       # 3-step deployment
-└── DEPLOYMENT.md       # Detailed deployment guide
-```
+- **Irong Barat A (IbA)** - 40T & 9T cranes
+- **Irong Barat B (IbB)** - 13T crane
+- **Irong Barat C (IbC)** - 13T crane
 
 ## 🔧 Technical Stack
 
-- **HTML5** - Semantic structure
-- **CSS3** - Gradients, animations, responsive
-- **Vanilla JavaScript** - No frameworks
-- **SignaturePad** - Handwriting support
-- **Service Worker** - Offline capability
-- **Web App Manifest** - PWA features
+- **HTML5** - Semantic markup
+- **CSS3** - Responsive design with minimalist blue theme
+- **Vanilla JavaScript** - No dependencies, lightweight
+- **PWA** - Service Worker for offline functionality
+- **Mobile-First** - Optimized for touch devices
 
-## 💡 Usage Tips
+## 📊 Calculator Details
 
-### Calculators:
-- All work offline after first load
-- Results show instantly
-- Color-coded results (green=safe, red=warning)
-- Custom values supported
+### LOPC Classification (Oil Leak Pin Hole)
+- **Tier 1 Major**: ≥2000 kg
+- **Tier 2 Reportable**: ≥200 kg
+- **Minor Reportable**: ≥100 kg
+- **Reportable (≥10L)**: ≥10 liters
+- **Below Threshold**: <100 kg AND <10L
 
-### Safety Reports:
-- Fill all required fields
-- Use AI refinement for professional tone
-- Reports suitable for WhatsApp/Email
-- Handwriting notes preserved as images
+### Drop Object Risk Levels
+- **Low Risk**: <50 J
+- **Medium Risk**: 50-200 J
+- **High Risk**: 200-500 J
+- **Fatal Risk**: ≥500 J
 
-### MOB/DEMOB:
-- Requires internet (external links)
-- Complete health declaration 24hrs before MOB
-- Save bookmarks for quick access
+### Weather Limits
+- **Helicopter Ops**: 35 knots wind, 3m waves
+- **Boat Transfer**: 25 knots wind, 2.5m waves
+- **Crane Operations**: 20 knots wind, 2m waves
+- **Diving Operations**: 15 knots wind, 1.5m waves
 
-## 🌐 Browser Support
+## 📝 Report Template
 
-- ✅ Safari (iOS 11.3+)
-- ✅ Chrome (Android 40+)
-- ✅ Edge, Firefox, Samsung Internet
-- ✅ Desktop browsers
+Reports are generated in WhatsApp format with:
+- Bold headers using asterisks (*)
+- Structured sections (Title, Date, Platform, Description, Action, Way Forward)
+- Auto-formatted date (DD/MM/YYYY)
+- Auto-signature with platform code
 
-## 📱 Offline Functionality
+## 🔒 Offline Functionality
 
-**Works Offline:**
-- All 12 calculators
-- Report generation
-- Handwriting canvas
-- Home navigation
+The PWA includes a service worker that caches:
+- All HTML, CSS, and JavaScript files
+- App icons and manifest
+- Works completely offline after first load
 
-**Requires Online:**
-- MOB/DEMOB external links
-- Initial PWA installation
-- Service worker update
+## 👨‍💼 Developed For
 
-## 🔒 Privacy
-
-- No data sent to external servers
-- Reports stay on device
-- Handwriting stored in localStorage
-- No tracking or analytics
-- MOB/DEMOB links go to PETRONAS systems only
-
-## 🛠️ Development
-
-```bash
-# Clone repository
-git clone https://github.com/YOUR_USERNAME/offshore-smart-hub.git
-
-# Open locally
-cd offshore-smart-hub
-# Open index.html in browser
-
-# Deploy to GitHub Pages
-git add .
-git commit -m "Initial deployment"
-git push origin main
-# Enable Pages in repository settings
-```
+**PETRONAS Offshore Operations**  
+Offshore Installation Manager Tool
 
 ## 📄 License
 
-MIT License - Free for personal and commercial use
+Developed for internal PETRONAS use.
 
-## 🤝 Contributing
+## 🤝 Support
 
-1. Fork the repository
-2. Create feature branch
-3. Make changes
-4. Test on iOS/Android
-5. Submit pull request
-
-## 📞 Support
-
-For issues or questions:
-- Open GitHub issue
-- Check [DEPLOYMENT.md](DEPLOYMENT.md) for troubleshooting
-- Review browser console for errors
-
-## 🎯 Roadmap
-
-- [ ] Export reports as PDF
-- [ ] More calculator types
-- [ ] Dark mode
-- [ ] Multi-language support (BM/EN)
-- [ ] Offline report sync
-- [ ] Report templates
-
-## ⚡ Performance
-
-- **Load Time:** < 2 seconds
-- **Offline:** Full functionality
-- **Storage:** ~5MB cache
-- **Bundle Size:** < 500KB
-
-## 🏆 Credits
-
-Developed for PETRONAS Offshore Operations  
-**Version:** 1.0.0  
-**Last Updated:** December 2024
+For issues or feature requests, contact the development team.
 
 ---
 
-**Made with ❤️ for Offshore Teams**
+**Version:** 1.0.0  
+**Last Updated:** December 2024  
+**Developer:** Aziz Mohamad - OIM
